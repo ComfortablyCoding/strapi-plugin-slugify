@@ -20,7 +20,7 @@ module.exports = ({ strapi }) => ({
 
 		// ensure the reference field has data
 		let referenceFieldValues = references
-			.filter((r) => typeof data[r] !== 'undefined' && data[r].length)
+			.filter((r) => (typeof data[r] !== 'undefined' && data[r].length) || (typeof data[r] === 'number'))
 			.map((r) => data[r]);
 
 		const hasUndefinedFields = referenceFieldValues.length < references.length;
@@ -33,8 +33,9 @@ module.exports = ({ strapi }) => ({
 			data[field] = toSlugWithCount(referenceFieldValues, settings.slugifyOptions);
 			return;
 		}
-
+		
 		data[field] = toSlug(referenceFieldValues, settings.slugifyOptions);
+
 	},
 
 	async findOne(uid, query) {
